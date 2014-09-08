@@ -4,7 +4,7 @@
 
 > A css sprite generator.
 
-> Generates sprites and propper css files out of a directory of images.
+> Generates sprites and proper css files out of a directory of images.
 
 > Supports retina sprites.
 
@@ -43,11 +43,12 @@ Options:
    -c, --css-image-path   http path to images on the web server (relative to css path or absolute path)  [../images]
    -n, --name             name of sprite file  [sprite.png]
    -p, --processor        output format of the css. one of css, less, sass, scss or stylus  [css]
+   -t, --template         output template file, overrides processor option
    -r, --retina           generate both retina and standard sprites. src images have to be in retina resolution
-   -s, --style            file to write css to, if ommited no css is written
+   -s, --style            file to write css to, if omitted no css is written
    -w, --watch            continuously create sprite
    --margin               margin in px between tiles  [5]
-   --orientation          orientation of the sprite image  [vertical]
+   --orientation          orientation of the sprite image (vertical|horizontal|binary-tree) [vertical]
    --prefix               prefix for the class name used in css (without .) [icon]
 ```
 
@@ -64,10 +65,11 @@ sprite.create(options, cb);
 * **cssPath:** http path to images on the web server (relative to css path or absolute)  [../images]
 * **name:** name of the sprite file  [sprite.png]
 * **processor:** output format of the css. one of css, less, sass, scss or stylus  [css]
+* **template:** output template file, overrides processor option
 * **retina:** generate both retina and standard sprites. src images have to be in retina resolution
 * **style:** file to write css to, if omitted no css is written
 * **margin:** margin in px between tiles  [5]
-* **orientation:** orientation of the sprite image [vertical]
+* **orientation:** orientation of the sprite image (vertical|horizontal|binary-tree) [vertical]
 * **prefix:** prefix for the class name used in css (without .) [icon]
 
 

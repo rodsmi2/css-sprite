@@ -40,6 +40,10 @@ var opts = require('nomnom')
     default: 'css',
     help: 'output format of the css. one of css, less, sass, scss or stylus'
   })
+  .option('template', {
+    abbr: 't',
+    help: 'output template file, overrides processor option'
+  })
   .option('retina', {
     abbr: 'r',
     flag: true,
@@ -47,7 +51,7 @@ var opts = require('nomnom')
   })
   .option('style', {
     abbr: 's',
-    help: 'file to write css to, if ommited no css is written'
+    help: 'file to write css to, if omitted no css is written'
   })
   .option('watch', {
     abbr: 'w',
@@ -59,16 +63,16 @@ var opts = require('nomnom')
     help: 'margin in px between tiles'
   })
   .option('orientation', {
-    choices: ['vertical', 'horizontal'],
+    choices: ['vertical', 'horizontal', 'binary-tree'],
     default: 'vertical',
-    help: 'orientation of the sprite image'
+    help: 'orientation of the sprite image (vertical|horizontal|binary-tree)'
   })
   .option('prefix', {
     help: 'prefix for the class name used in css (without .)'
   })
   .script('css-sprite')
   .parse();
-  
+
 if (opts.watch) {
   gaze(opts.src, function () {
     console.log('Watching for file changes ...');

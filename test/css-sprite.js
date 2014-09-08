@@ -66,6 +66,25 @@ describe('css-sprite (lib/css-sprite.js)', function () {
       .on('data', noop)
       .on('end', done);
   });
+  it('should return a object stream with a sprite in binary-tree format', function (done) {
+    vfs.src('./test/fixtures/**')
+      .pipe(sprite({
+        out: './dist/img',
+        name: 'sprites.png',
+        orientation: 'binary-tree'
+      }))
+      .pipe(through2.obj(function (file, enc, cb) {
+        var img = new Image();
+        img.src = file.contents;
+        file.path.should.equal('dist/img/sprites.png');
+        file.relative.should.equal('sprites.png');
+        img.width.should.equal(276);
+        img.height.should.equal(276);
+        cb();
+      }))
+      .on('data', noop)
+      .on('end', done);
+  });
   it('should return a object stream with a sprite and a css file', function (done) {
     var png, css;
     vfs.src('./test/fixtures/**')
@@ -95,6 +114,40 @@ describe('css-sprite (lib/css-sprite.js)', function () {
         css.contents.toString('utf-8').should.containEql('.icon-cart');
         css.contents.toString('utf-8').should.containEql('.icon-command');
         css.contents.toString('utf-8').should.containEql('.icon-font');
+        done();
+      });
+  });
+  it('should return a object stream with a sprite and a css file (using a custom template)', function (done) {
+    var png, css;
+    vfs.src('./test/fixtures/**')
+      .pipe(sprite({
+        out: './dist/img',
+        name: 'sprites.png',
+        style: './dist/css/sprites.css',
+        template: './test/template/template.mustache'
+      }))
+      .pipe(through2.obj(function (file, enc, cb) {
+        if (file.relative.indexOf('png') > -1) {
+          png = file;
+        }
+        else {
+          css = file;
+        }
+        cb();
+      }))
+      .on('data', noop)
+      .on('end', function () {
+        png.should.be.ok;
+        png.path.should.equal('dist/img/sprites.png');
+        png.relative.should.equal('sprites.png');
+        css.should.be.ok;
+        css.path.should.equal('./dist/css/sprites.css');
+        css.relative.should.equal('sprites.css');
+        css.contents.toString('utf-8').should.containEql('.icon-camera');
+        css.contents.toString('utf-8').should.containEql('.icon-cart');
+        css.contents.toString('utf-8').should.containEql('.icon-command');
+        css.contents.toString('utf-8').should.containEql('.icon-font');
+        css.contents.toString('utf-8').should.containEql('custom: \'template\';');
         done();
       });
   });
@@ -236,7 +289,6 @@ describe('css-sprite (lib/css-sprite.js)', function () {
       });
   });
   it('should throw error when file stream', function (done) {
-
     vfs.src('./test/fixtures/**', {buffer: false})
       .pipe(sprite({
         out: './dist/img',
@@ -246,5 +298,24 @@ describe('css-sprite (lib/css-sprite.js)', function () {
         err.toString().should.equal('Error: Streaming not supported');
         done();
       })
+  });
+  it('should return an object stream with a binary-tree sprite', function (done) {
+    vfs.src('./test/fixtures/**')
+      .pipe(sprite({
+        out: './dist/img',
+        name: 'sprites.png',
+        orientation: 'binary-tree'
+      }))
+      .pipe(through2.obj(function (file, enc, cb) {
+        var img = new Image();
+        img.src = file.contents;
+        file.path.should.equal('dist/img/sprites.png');
+        file.relative.should.equal('sprites.png');
+        img.width.should.equal(276);
+        img.height.should.equal(276);
+        cb();
+      }))
+      .on('data', noop)
+      .on('end', done);
   });
 });
