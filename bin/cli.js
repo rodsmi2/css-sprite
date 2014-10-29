@@ -29,10 +29,16 @@ var opts = require('nomnom')
     default: '../images',
     help: 'http path to images on the web server (relative to css path or absolute path)'
   })
+  .option('format', {
+    abbr: 'f',
+    choices: ['png', 'jpg'],
+    default: 'png',
+    help: 'output format of the sprite (png or jpg)'
+  })
   .option('name', {
     abbr: 'n',
-    default: 'sprite.png',
-    help: 'name of sprite file'
+    default: 'sprite',
+    help: 'name of sprite file without file extension '
   })
   .option('processor', {
     abbr: 'p',
@@ -58,9 +64,17 @@ var opts = require('nomnom')
     flag: true,
     help: 'continuously create sprite'
   })
+  .option('background', {
+    default: '#FFFFFF',
+    help: 'background color of the sprite in hex'
+  })
   .option('margin', {
     default: 5,
     help: 'margin in px between tiles'
+  })
+  .option('opacity', {
+    default: 0,
+    help: 'background opacity of the sprite. defaults to 0 when png or 100 when jpg'
   })
   .option('orientation', {
     choices: ['vertical', 'horizontal', 'binary-tree'],

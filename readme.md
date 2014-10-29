@@ -1,6 +1,6 @@
 # css-sprite
 
-[![NPM version](https://badge.fury.io/js/css-sprite.png)](http://badge.fury.io/js/css-sprite) [![Build Status](https://travis-ci.org/aslansky/css-sprite.png?branch=master)](https://travis-ci.org/aslansky/css-sprite) [![Coverage Status](https://coveralls.io/repos/aslansky/css-sprite/badge.png)](https://coveralls.io/r/aslansky/css-sprite) [![Dependencies](https://david-dm.org/aslansky/css-sprite.png)](https://david-dm.org/aslansky/css-sprite)
+[![NPM version](https://badge.fury.io/js/css-sprite.svg)](http://badge.fury.io/js/css-sprite) [![Build Status](https://travis-ci.org/aslansky/css-sprite.svg?branch=master)](https://travis-ci.org/aslansky/css-sprite) [![Coverage Status](https://img.shields.io/coveralls/aslansky/css-sprite.svg)](https://coveralls.io/r/aslansky/css-sprite) [![Dependencies](https://david-dm.org/aslansky/css-sprite.svg)](https://david-dm.org/aslansky/css-sprite)
 
 > A css sprite generator.
 
@@ -12,9 +12,7 @@
 
 ## Requirements
 
-`css-sprite` requires [node-canvas](https://github.com/learnboost/node-canvas) which depends on [Cairo](http://cairographics.org/).
-
-Please refer to the [installation guide](https://github.com/learnboost/node-canvas/wiki).
+Starting with version 0.9 `css-sprite` has no external dependencies
 
 ## Install
 
@@ -32,7 +30,7 @@ npm install css-sprite -g
 
 ## Command Line Interface
 
-```
+```sh
 Usage: css-sprite <out> <src>... [options]
 
 out     path of directory to write sprite file to
@@ -41,15 +39,18 @@ src     glob strings to find source images to put into the sprite
 Options:
    -b, --base64           create css with base64 encoded sprite (css file will be written to <out>)
    -c, --css-image-path   http path to images on the web server (relative to css path or absolute path)  [../images]
-   -n, --name             name of sprite file  [sprite.png]
+   -f, --format           output format of the sprite (png or jpg)  [png]
+   -n, --name             name of sprite file without file extension   [sprite]
    -p, --processor        output format of the css. one of css, less, sass, scss or stylus  [css]
    -t, --template         output template file, overrides processor option
    -r, --retina           generate both retina and standard sprites. src images have to be in retina resolution
    -s, --style            file to write css to, if omitted no css is written
    -w, --watch            continuously create sprite
+   --background           background color of the sprite in hex  [#FFFFFF]
    --margin               margin in px between tiles  [5]
-   --orientation          orientation of the sprite image (vertical|horizontal|binary-tree) [vertical]
-   --prefix               prefix for the class name used in css (without .) [icon]
+   --opacity              background opacity of the sprite. defaults to 0 when png or 100 when jpg  [0]
+   --orientation          orientation of the sprite image (vertical|horizontal|binary-tree)  [vertical]
+   --prefix               prefix for the class name used in css (without .)
 ```
 
 ## Programatic usage
@@ -63,23 +64,26 @@ sprite.create(options, cb);
 * **out:** path of directory to write sprite file to  [process.cwd()]
 * **base64:** when true instead of creating a sprite writes base64 encoded images to css (css file will be written to `<out>`)
 * **cssPath:** http path to images on the web server (relative to css path or absolute)  [../images]
-* **name:** name of the sprite file  [sprite.png]
+* **format** format of the generated sprite (png or jpg). By default uses png.
+* **name:** name of the sprite file without file extension  [sprite]
 * **processor:** output format of the css. one of css, less, sass, scss or stylus  [css]
 * **template:** output template file, overrides processor option
 * **retina:** generate both retina and standard sprites. src images have to be in retina resolution
+* **background** background color of the sprite in hex. Defaults to #FFFFFF
 * **style:** file to write css to, if omitted no css is written
 * **margin:** margin in px between tiles  [5]
+* **opacity** background opacity of the sprite between 0 and 100. Defaults to 0 when png or 100 when jpg
 * **orientation:** orientation of the sprite image (vertical|horizontal|binary-tree) [vertical]
 * **prefix:** prefix for the class name used in css (without .) [icon]
 
 
 ### Example
-```
+```js
 var sprite = require('css-sprite');
 sprite.create({
   src: ['./src/img/*.png'],
   out: './dist/img'
-  name: 'sprites.png',
+  name: 'sprites',
   style: './dist/scss/_sprites.scss',
   cssPath: '../img',
   processor: 'scss'
@@ -89,7 +93,7 @@ sprite.create({
 ```
 
 ## Usage with [Gulp](http://gulpjs.com)
-```
+```js
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var sprite = require('css-sprite').stream;
@@ -98,7 +102,7 @@ var sprite = require('css-sprite').stream;
 gulp.task('sprites', function () {
   return gulp.src('./src/img/*.png')
     .pipe(sprite({
-      name: 'sprite.png',
+      name: 'sprite',
       style: '_sprite.scss',
       cssPath: './img',
       processor: 'scss'
@@ -123,7 +127,7 @@ Options to use `css-sprite` with [Gulp](http://gulpjs.com) are the same as for t
 
 Add `css-sprite` as a dependency to your grunt project and then use something like this in your `gruntfile.js`:
 
-```
+```js
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -167,7 +171,7 @@ Options to use `css-sprite` with [Grunt](http://gruntjs.com) are the same as for
 
 #### [scss](http://sass-lang.com/) example
 
-```
+```scss
 @import 'sprite'; // the generated style file (sprite.scss)
 
 // camera icon (camera.png in src directory)
@@ -183,7 +187,7 @@ Options to use `css-sprite` with [Grunt](http://gruntjs.com) are the same as for
 
 #### [sass](http://sass-lang.com/) example
 
-```
+```sass
 @import 'sprite' // the generated style file (sprite.sass)
 
 // camera icon (camera.png in src directory)
@@ -197,7 +201,7 @@ Options to use `css-sprite` with [Grunt](http://gruntjs.com) are the same as for
 
 #### [less](http://lesscss.org/) example
 
-```
+```less
 @import 'sprite'; // the generated style file (sprite.less)
 
 // camera icon (camera.png in src directory)
@@ -213,7 +217,7 @@ Options to use `css-sprite` with [Grunt](http://gruntjs.com) are the same as for
 
 #### [stylus](http://learnboost.github.io/stylus/) example
 
-```
+```stylus
 @import 'sprite' // the generated style file (sprite.styl)
 
 // camera icon (camera.png in src directory)

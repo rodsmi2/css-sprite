@@ -23,14 +23,17 @@ var writeFile = function (file, enc, cb) {
 var defaults = {
   src: null,
   out: '',
-  name: 'sprite.png',
+  name: 'sprite',
   style: null,
+  format: 'png',
   cssPath: '../images',
   processor: 'css',
   template: null,
   orientation: 'vertical',
   retina: false,
-  margin: 5
+  background: '#FFFFFF',
+  margin: 5,
+  opacity: 0,
 };
 
 module.exports = {
